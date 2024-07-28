@@ -11,7 +11,7 @@ public static class GameComponent_Anomaly_Patch
 
     [HarmonyPatch(nameof(GameComponent_Anomaly.StartedNewGame))]
     [HarmonyPrefix]
-    public static bool StartedNewGame_Patch(GameComponent_Anomaly __instance)
+    public static bool StartedNewGame_Patch()
     {
         return !Current.Game.GetComponent<InbetweenGameComponent>().InbetweenQuickplayMode;
     }
