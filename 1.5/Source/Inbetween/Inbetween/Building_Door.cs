@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using RimWorld;
 using RimWorld.Planet;
@@ -7,7 +6,7 @@ using Verse;
 
 namespace Inbetween.Inbetween;
 
-public class Building_InbetweenDoor: MapPortal
+public class Building_InbetweenDoor : MapPortal
 {
     public override string EnterCommandString => "Inbetween_EnterDoor".Translate();
     public override bool AutoDraftOnEnter => true;
@@ -31,6 +30,7 @@ public class Building_InbetweenDoor: MapPortal
         {
             GenerateUndercave();
         }
+
         return undercave;
     }
 
@@ -40,6 +40,7 @@ public class Building_InbetweenDoor: MapPortal
         {
             return IntVec3.Invalid;
         }
+
         return ReturnDoor.Position;
     }
 
@@ -49,39 +50,33 @@ public class Building_InbetweenDoor: MapPortal
         InbetweenGenDef newMapDef = Current.Game.GetComponent<InbetweenGameComponent>().NextMapGen();
 
         //Skip these if it's already defined in the mapgen
-        if(!newMapDef.mapGenerator.genSteps.Any(s=>s==InbetweenDefOf.IB_GenStep_InbetweenDoor))
+        if (!newMapDef.mapGenerator.genSteps.Any(s => s == InbetweenDefOf.IB_GenStep_InbetweenDoor))
+        {
             extraSteps.Add(new GenStepWithParams(InbetweenDefOf.IB_GenStep_InbetweenDoor, new GenStepParams()));
-
-        if(!newMapDef.mapGenerator.genSteps.Any(s=>s==InbetweenDefOf.IB_GenStep_InbetweenReturnDoor))
-            extraSteps.Add(new GenStepWithParams(InbetweenDefOf.IB_GenStep_InbetweenReturnDoor, new GenStepParams()));
-
-        // undercave = PocketMapUtility.GeneratePocketMap(new IntVec3(100, 1, 100), newMapDef.mapGenerator, extraSteps, Map);
-
-        try
-        {
-            PocketMapParent parent = WorldObjectMaker.MakeWorldObject(WorldObjectDefOf.PocketMap) as PocketMapParent;
-            parent.sourceMap = Map;
-            IntVec3 mapSize = new IntVec3(75, 1, 75);
-            MapGeneratorDef gen = newMapDef.mapGenerator;
-
-            undercave = MapGenerator.GenerateMap(mapSize, parent, gen, extraSteps, isPocketMap: true);
-            Find.World.pocketMaps.Add(parent);
-
-            InbetweenMapComponent ibmc = new InbetweenMapComponent(undercave);
-            ibmc.InbetweenGenDef = newMapDef;
-            undercave.components.Add(ibmc);
-
-            ReturnDoor = undercave.listerThings.ThingsOfDef(InbetweenDefOf.IB_ReturnDoor).First() as Building_ReturnDoor;
-
-            if (ReturnDoor != null)
-            {
-                ReturnDoor.inbetweenDoor = this;
-            }
         }
-        catch (Exception e)
+
+        if (!newMapDef.mapGenerator.genSteps.Any(s => s == InbetweenDefOf.IB_GenStep_InbetweenReturnDoor))
         {
-            Log.Error(e.ToString());
-            throw;
+            extraSteps.Add(new GenStepWithParams(InbetweenDefOf.IB_GenStep_InbetweenReturnDoor, new GenStepParams()));
+        }
+
+        PocketMapParent parent = WorldObjectMaker.MakeWorldObject(WorldObjectDefOf.PocketMap) as PocketMapParent;
+        parent.sourceMap = Map;
+        IntVec3 mapSize = new IntVec3(75, 1, 75);
+        MapGeneratorDef gen = newMapDef.mapGenerator;
+
+        undercave = MapGenerator.GenerateMap(mapSize, parent, gen, extraSteps, isPocketMap: true);
+        Find.World.pocketMaps.Add(parent);
+
+        InbetweenMapComponent ibmc = new InbetweenMapComponent(undercave);
+        ibmc.InbetweenGenDef = newMapDef;
+        undercave.components.Add(ibmc);
+
+        ReturnDoor = undercave.listerThings.ThingsOfDef(InbetweenDefOf.IB_ReturnDoor).First() as Building_ReturnDoor;
+
+        if (ReturnDoor != null)
+        {
+            ReturnDoor.inbetweenDoor = this;
         }
     }
 
