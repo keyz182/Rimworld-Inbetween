@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
 
-    <ScenPartDef>
-        <defName>DisableExostriderRemains</defName>
-        <label>disable exostrider remains</label>
-        <scenPartClass>ScenPart_DisableMapGen</scenPartClass>
-        <genStep>AncientExostriderRemains</genStep>
-        <category>Rule</category>
-        <selectionWeight>0</selectionWeight>
-        <summaryPriority>500</summaryPriority>
-        <maxUses>1</maxUses>
-    </ScenPartDef>
-
   <ScenarioDef Name="InbetweenQuickstart">
     <defName>IB_Quickstart</defName>
     <label>Inbetween Quickstart</label>

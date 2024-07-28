@@ -3,6 +3,9 @@
     <Inbetween_MainMenu>The In-Between</Inbetween_MainMenu>
     <Inbetween_GeneratingInbetween>Generating In-Between</Inbetween_GeneratingInbetween>
     <Inbetween_EnterDoor>Enter the strange door</Inbetween_EnterDoor>
+    <IB_PawnsWouldBeStuck>Some of your pawns would get stranded</IB_PawnsWouldBeStuck>
+    <IB_Open>Open</IB_Open>
+    <IB_Closed>Closed</IB_Closed>
     <Inbetween_SettingsCategory>Inbetween</Inbetween_SettingsCategory>
     <Inbetween_Settings_SettingName>Some Setting</Inbetween_Settings_SettingName>
 </LanguageData>

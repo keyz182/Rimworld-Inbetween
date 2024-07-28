@@ -62,8 +62,9 @@
     <AboutFiles Include="../../../About/**" Exclude="../../../About/*.png~"/>
     <CommonFiles Include="../../../Common/**" />
     <CompatibilityFiles Include="../../../Compatibility/**" />
-    
-    <ExtraFiles Include="../../../LoadFolders.xml;../../../LICENSE;../../../README.md" />
+    <ExtraFiles Include="..\..\..\LoadFolders.xml" />
+    <ExtraFiles Include="../../../LICENSE" />
+    <ExtraFiles Include="../../../README.md" />
     
     <ReleaseFiles Update="..\..\Defs\Inbetween_Scenarios.xml">
       <Link>Inbetween\1.5\Defs\Inbetween_Scenarios.xml</Link>
@@ -76,11 +77,22 @@
     <ReleaseFiles Update="..\..\Defs\Inbetween_EmptyZone.xml">
       <Link>Inbetween\1.5\Defs\Inbetween_EmptyZone.xml</Link>
     </ReleaseFiles>
+    
+    <ReleaseFiles Update="..\..\Defs\Inbetween_GenSteps.xml">
+      <Link>_ModFiles\1.5\Defs\Inbetween_GenSteps</Link>
+    </ReleaseFiles>
+    
+    <ReleaseFiles Update="..\..\Defs\Inbetween_Biomes.xml">
+      <Link>_ModFiles\1.5\Defs\Inbetween_Biomes.xml</Link>
+    </ReleaseFiles>
   </ItemGroup>
   <ItemGroup>
-    <ReleaseFiles Include="..\..\Defs\Inbetween_EmptyMapgen.xml">
-      <Link>Inbetween\1.5\Defs\Inbetween_EmptyMapgen.xml</Link>
+    <ReleaseFiles Include="..\..\Defs\Inbetween_MapGenerators.xml">
+      <Link>Inbetween\1.5\Defs\Inbetween_MapGenerators.xml</Link>
     </ReleaseFiles>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Update="..\..\..\" />
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="Build" Condition=" '$(Configuration)' == 'Release' ">
     <RemoveDir Condition="Exists('../../../Release')" Directories="../../../Release" />

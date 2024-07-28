@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using HarmonyLib;
-using Inbetween.Inbetween;
+using Inbetween.Mapping;
 using RimWorld;
 using RimWorld.Planet;
 using Verse;
@@ -79,11 +79,6 @@ public static class Game_Patch
                         __instance.tickManager.DoSingleTick();
                         __instance.tickManager.CurTimeSpeed = TimeSpeed.Paused;
                     });
-
-                foreach (Pawn pawm in Find.GameInitData.startingAndOptionalPawns)
-                {
-                    pawm.SetFaction(Faction.OfPlayer);
-                }
 
                 Find.Scenario.PostGameStart();
                 __instance.history.FinalizeInit();

@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Defs>
+    <BiomeDef>
+        <defName>IB_EmptyBiome</defName>
+        <label>InbetweenEmpty</label>
+        <workerClass>Inbetween.MapGen.BiomeWorker_Empty</workerClass>
+        <description>This place feels disconnected from any familiar environment. The heavy air and crushing silence create a pervasive sense of dread.</description>
+        <generatesNaturally>false</generatesNaturally>
+        <animalDensity>0</animalDensity>
+        <plantDensity>0</plantDensity>
+        <wildAnimalsCanWanderInto>false</wildAnimalsCanWanderInto>
+        <baseWeatherCommonalities>
+            <Clear>1</Clear>
+        </baseWeatherCommonalities>
+        <terrainsByFertility>
+            <li>
+                <terrain>BrokenAsphalt</terrain>
+                <min>-999</min>
+                <max>999</max>
+            </li>
+        </terrainsByFertility>
+    </BiomeDef>
+</Defs>

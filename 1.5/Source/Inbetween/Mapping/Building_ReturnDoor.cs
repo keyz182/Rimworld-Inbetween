@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using RimWorld;
 using Verse;
 
-namespace Inbetween.Inbetween;
+namespace Inbetween.Mapping;
 
-public class Building_ReturnDoor: MapPortal
+public class Building_ReturnDoor : MapPortal
 {
     public override string EnterCommandString => "Inbetween_EnterDoor".Translate();
     public override bool AutoDraftOnEnter => true;
@@ -26,6 +25,7 @@ public class Building_ReturnDoor: MapPortal
 
     public override bool IsEnterable(out string reason)
     {
+        // return doors should always be enterable
         reason = "";
         return true;
     }

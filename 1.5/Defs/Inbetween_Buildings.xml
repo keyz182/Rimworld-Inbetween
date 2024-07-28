@@ -6,16 +6,36 @@
         <label>strange door</label>
         <description>A very strange door</description>
 
-                <graphicData>
-            <texPath>Things/Building/Door/DoorSimple_Mover</texPath>
+        <inspectorTabs>
+            <li>ITab_ContentsMapPortal</li>
+        </inspectorTabs>
+
+        <graphicData>
+            <texPath>Buildings/IB_Door</texPath>
             <graphicClass>Graphic_Single</graphicClass>
+            <drawSize>2</drawSize>
             <damageData>
                 <!--  no damage marks because they don't move with the door  -->
                 <enabled>false</enabled>
             </damageData>
         </graphicData>
+        <size>(2,2)</size>
 
-        <thingClass>Inbetween.Inbetween.Building_InbetweenDoor</thingClass>
+        <modExtensions>
+            <li Class="Inbetween.Mapping.IB_DoorExtension">
+                <extraGraphicData>
+                    <texPath>Buildings/IB_DoorClosed</texPath>
+                    <graphicClass>Graphic_Single</graphicClass>
+                    <drawSize>2</drawSize>
+                    <damageData>
+                        <!--  no damage marks because they don't move with the door  -->
+                        <enabled>false</enabled>
+                    </damageData>
+                </extraGraphicData>
+            </li>
+        </modExtensions>
+
+        <thingClass>Inbetween.Mapping.Building_InbetweenDoor</thingClass>
         <category>Building</category>
         <altitudeLayer>DoorMoveable</altitudeLayer>
         <fillPercent>1</fillPercent>
@@ -61,6 +81,8 @@
 
     <ThingDef ParentName="InbetweenDoor">
         <defName>IB_ReturnDoor</defName>
-        <thingClass>Inbetween.Inbetween.Building_ReturnDoor</thingClass>
+        <label>Return Door</label>
+        <thingClass>Inbetween.Mapping.Building_ReturnDoor</thingClass>
+
     </ThingDef>
 </Defs>

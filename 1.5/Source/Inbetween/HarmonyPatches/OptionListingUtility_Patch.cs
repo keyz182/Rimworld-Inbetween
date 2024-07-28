@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using HarmonyLib;
-using Inbetween.Inbetween;
+using Inbetween.Mapping;
 using RimWorld;
 using RimWorld.Planet;
 using UnityEngine;
@@ -26,10 +26,7 @@ public static class OptionListingUtility_Patch
             OverallRainfall.Normal,
             OverallTemperature.Normal,
             OverallPopulation.AlmostNone,
-            new List<FactionDef>()
-            {
-                FactionDefOf.OutlanderRefugee
-            });
+            new List<FactionDef> { FactionDefOf.OutlanderRefugee });
         Find.GameInitData.ChooseRandomStartingTile();
         Find.GameInitData.mapSize = 75;
         Find.Scenario.PostIdeoChosen();
@@ -39,8 +36,19 @@ public static class OptionListingUtility_Patch
     [HarmonyPrefix]
     public static void DrawOptionListing_Patch(Rect rect, ref List<ListableOption> optList)
     {
+        if (Current.ProgramState != ProgramState.Entry)
+        {
+            return;
+        }
+
+        if (optList.Any(l => l is ListableOption_WebLink))
+        {
+            return;
+        }
+
         if (!optList.Any(l => l.label == "Tutorial".Translate() || l.label == "Options".Translate()))
             return;
+
 
         ListableOption newOpt = new ListableOption("Inbetween_MainMenu".Translate(),
             () => LongEventHandler.QueueLongEvent(() =>
@@ -51,8 +59,8 @@ public static class OptionListingUtility_Patch
                 "Inbetween_GeneratingInbetween",
                 true,
                 GameAndMapInitExceptionHandlers.ErrorWhileGeneratingMap
-                )
-            );
+            )
+        );
 
         optList.Insert(0, newOpt);
     }

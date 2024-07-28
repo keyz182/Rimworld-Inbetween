@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Defs>
+
+    <MapGeneratorDef Name="InbetweenEmpty">
+        <defName>IB_Empty</defName>
+        <label>InbetweenEmpty</label>
+        <ignoreAreaRevealedLetter>true</ignoreAreaRevealedLetter>
+        <disableShadows>true</disableShadows>
+        <disableCallAid>true</disableCallAid>
+
+        <genSteps>
+            <li>Terrain</li>
+            <li>FindPlayerStartSpot</li>
+            <li>ScenParts</li>
+            <li>IB_GenStep_InbetweenDoor</li>
+        </genSteps>
+    </MapGeneratorDef>
+
+    <MapGeneratorDef>
+        <defName>IB_EmptyZoneMapGen</defName>
+        <label>InbetweenEmpty</label>
+        <ignoreAreaRevealedLetter>true</ignoreAreaRevealedLetter>
+        <disableShadows>true</disableShadows>
+        <disableCallAid>true</disableCallAid>
+        <isUnderground>false</isUnderground>
+        <forceCaves>false</forceCaves>
+
+        <pocketMapProperties>
+            <biome>IB_EmptyBiome</biome>
+            <temperature>15</temperature>
+            <destroyOnParentMapAbandoned>false</destroyOnParentMapAbandoned>
+        </pocketMapProperties>
+
+        <genSteps>
+            <li>ElevationFertility</li>
+            <li>TerrainEmpty</li>
+            <li>ScenParts</li>
+            <li>IB_GenStep_InbetweenDoor</li>
+            <li>IB_GenStep_InbetweenReturnDoor</li>
+        </genSteps>
+    </MapGeneratorDef>
+</Defs>

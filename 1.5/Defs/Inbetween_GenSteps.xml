@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Defs>
+
+    <GenStepDef>
+        <defName>IB_GenStep_InbetweenDoor</defName>
+        <order>1000</order>
+        <genStep Class="Inbetween.MapGen.GenStep_StartDoor"/>
+    </GenStepDef>
+
+    <GenStepDef>
+        <defName>IB_GenStep_InbetweenReturnDoor</defName>
+        <order>1000</order>
+        <genStep Class="Inbetween.MapGen.GenStep_ReturnDoor"/>
+    </GenStepDef>
+
+    <GenStepDef>
+        <defName>TerrainEmpty</defName>
+        <order>210</order>
+        <genStep Class="Inbetween.MapGen.GenStep_TerrainEmpty"/>
+    </GenStepDef>
+
+</Defs>
