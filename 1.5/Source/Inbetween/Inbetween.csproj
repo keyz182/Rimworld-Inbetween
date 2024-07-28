@@ -58,6 +58,9 @@
     <StartProgram>$(SolutionDir)../../../../RimWorldWin64.exe</StartProgram>
   </PropertyGroup>
   <ItemGroup>
+    <ExtraFiles Include="..\..\..\Steam.md">
+      <Link>_ModFiles\Steam.md</Link>
+    </ExtraFiles>
     <ReleaseFiles Include="../../../1.*/**" Exclude="../../../1.*/Source/**" />
     <AboutFiles Include="../../../About/**" Exclude="../../../About/*.png~"/>
     <CommonFiles Include="../../../Common/**" />
@@ -90,9 +93,6 @@
     <ReleaseFiles Include="..\..\Defs\Inbetween_MapGenerators.xml">
       <Link>Inbetween\1.5\Defs\Inbetween_MapGenerators.xml</Link>
     </ReleaseFiles>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Update="..\..\..\" />
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="Build" Condition=" '$(Configuration)' == 'Release' ">
     <RemoveDir Condition="Exists('../../../Release')" Directories="../../../Release" />
