@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Defs>
+
+    <GenStepDef>
+        <defName>IB_GenStep_InbetweenDoor</defName>
+        <order>1000</order>
+        <genStep Class="Inbetween.Inbetween.GenStep_StartDoor" />
+    </GenStepDef>
+
+    <GenStepDef>
+        <defName>IB_GenStep_InbetweenReturnDoor</defName>
+        <order>1000</order>
+        <genStep Class="Inbetween.Inbetween.GenStep_ReturnDoor" />
+    </GenStepDef>
+
+    <GenStepDef>
+        <defName>IB_EmptyGenStep</defName>
+        <order>10</order>
+        <genStep Class="Inbetween.Inbetween.GenStep_Empty" />
+    </GenStepDef>
+
+    <MapGeneratorDef Name="InbetweenEmpty">
+        <defName>IB_Empty</defName>
+        <label>InbetweenEmpty</label>
+        <ignoreAreaRevealedLetter>true</ignoreAreaRevealedLetter>
+        <disableShadows>true</disableShadows>
+        <disableCallAid>true</disableCallAid>
+
+        <genSteps>
+            <li>Terrain</li>
+            <li>FindPlayerStartSpot</li>
+            <li>ScenParts</li>
+            <li>IB_GenStep_InbetweenDoor</li>
+        </genSteps>
+    </MapGeneratorDef>
+
+</Defs>

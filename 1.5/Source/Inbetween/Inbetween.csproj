@@ -64,6 +64,23 @@
     <CompatibilityFiles Include="../../../Compatibility/**" />
     
     <ExtraFiles Include="../../../LoadFolders.xml;../../../LICENSE;../../../README.md" />
+    
+    <ReleaseFiles Update="..\..\Defs\Inbetween_Scenarios.xml">
+      <Link>Inbetween\1.5\Defs\Inbetween_Scenarios.xml</Link>
+    </ReleaseFiles>
+    
+    <ReleaseFiles Update="..\..\Defs\Inbetween_Buildings.xml">
+      <Link>Inbetween\1.5\Defs\Inbetween_Buildings.xml</Link>
+    </ReleaseFiles>
+    
+    <ReleaseFiles Update="..\..\Defs\Inbetween_EmptyZone.xml">
+      <Link>Inbetween\1.5\Defs\Inbetween_EmptyZone.xml</Link>
+    </ReleaseFiles>
+  </ItemGroup>
+  <ItemGroup>
+    <ReleaseFiles Include="..\..\Defs\Inbetween_EmptyMapgen.xml">
+      <Link>Inbetween\1.5\Defs\Inbetween_EmptyMapgen.xml</Link>
+    </ReleaseFiles>
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="Build" Condition=" '$(Configuration)' == 'Release' ">
     <RemoveDir Condition="Exists('../../../Release')" Directories="../../../Release" />

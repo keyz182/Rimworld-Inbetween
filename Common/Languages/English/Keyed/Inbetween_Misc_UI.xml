@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
+    <Inbetween_MainMenu>The In-Between</Inbetween_MainMenu>
+    <Inbetween_GeneratingInbetween>Generating In-Between</Inbetween_GeneratingInbetween>
+    <Inbetween_EnterDoor>Enter the strange door</Inbetween_EnterDoor>
     <Inbetween_SettingsCategory>Inbetween</Inbetween_SettingsCategory>
     <Inbetween_Settings_SettingName>Some Setting</Inbetween_Settings_SettingName>
 </LanguageData>

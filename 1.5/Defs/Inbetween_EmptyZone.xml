@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Defs>
+    <Inbetween.Inbetween.InbetweenGenDef>
+        <defName>IB_EmptyZone</defName>
+        <mapGenerator>IB_EmptyZoneMapGen</mapGenerator>
+    </Inbetween.Inbetween.InbetweenGenDef>
+
+    <MapGeneratorDef>
+        <defName>IB_EmptyZoneMapGen</defName>
+        <label>InbetweenEmpty</label>
+        <ignoreAreaRevealedLetter>true</ignoreAreaRevealedLetter>
+        <disableShadows>true</disableShadows>
+        <disableCallAid>true</disableCallAid>
+        <pocketMapProperties>
+            <biome>IB_EmptyBiome</biome>
+            <temperature>15</temperature>
+        </pocketMapProperties>
+
+        <genSteps>
+            <li>ElevationFertility</li>
+            <li>Terrain</li>
+            <li>FindPlayerStartSpot</li>
+            <li>ScenParts</li>
+            <li>IB_GenStep_InbetweenDoor</li>
+            <li>IB_GenStep_InbetweenReturnDoor</li>
+        </genSteps>
+    </MapGeneratorDef>
+
+    <BiomeDef>
+        <defName>IB_EmptyBiome</defName>
+        <label>InbetweenEmpty</label>
+        <description>This place feels disconnected from any familiar environment. The heavy air and crushing silence create a pervasive sense of dread.</description>
+        <generatesNaturally>false</generatesNaturally>
+        <animalDensity>0</animalDensity>
+        <plantDensity>0</plantDensity>
+        <wildAnimalsCanWanderInto>false</wildAnimalsCanWanderInto>
+        <baseWeatherCommonalities>
+            <Clear>1</Clear>
+        </baseWeatherCommonalities>
+    </BiomeDef>
+
+</Defs>

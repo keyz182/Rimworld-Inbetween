@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Defs>
+    <ThingDef ParentName="BuildingBase" Name="InbetweenDoor">
+        <defName>IB_Door</defName>
+        <label>strange door</label>
+        <description>A very strange door</description>
+
+                <graphicData>
+            <texPath>Things/Building/Door/DoorSimple_Mover</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+            <damageData>
+                <!--  no damage marks because they don't move with the door  -->
+                <enabled>false</enabled>
+            </damageData>
+        </graphicData>
+
+        <thingClass>Inbetween.Inbetween.Building_InbetweenDoor</thingClass>
+        <category>Building</category>
+        <altitudeLayer>DoorMoveable</altitudeLayer>
+        <fillPercent>1</fillPercent>
+        <useHitPoints>true</useHitPoints>
+        <stuffCategories>
+            <li>Metallic</li>
+            <li>Woody</li>
+            <li>Stony</li>
+        </stuffCategories>
+        <statBases>
+            <MaxHitPoints>1600</MaxHitPoints>
+            <Flammability>1.0</Flammability>
+        </statBases>
+
+        <leaveResourcesWhenKilled>false</leaveResourcesWhenKilled>
+        <selectable>true</selectable>
+        <tickerType>Normal</tickerType>
+        <rotatable>false</rotatable>
+        <soundImpactDefault>BulletImpact_Metal</soundImpactDefault>
+        <useStuffTerrainAffordance>true</useStuffTerrainAffordance>
+        <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+        <designationCategory>Structure</designationCategory>
+        <uiOrder>2010</uiOrder>
+        <holdsRoof>true</holdsRoof>
+        <staticSunShadowHeight>1.0</staticSunShadowHeight>
+        <blockLight>true</blockLight>
+        <drawerType>RealtimeOnly</drawerType>
+        <building>
+            <isInert>true</isInert>
+            <canPlaceOverWall>true</canPlaceOverWall>
+            <soundDoorOpenPowered>Door_OpenPowered</soundDoorOpenPowered>
+            <soundDoorClosePowered>Door_ClosePowered</soundDoorClosePowered>
+            <soundDoorOpenManual>Door_OpenManual</soundDoorOpenManual>
+            <soundDoorCloseManual>Door_CloseManual</soundDoorCloseManual>
+            <blueprintClass>Blueprint_Door</blueprintClass>
+            <blueprintGraphicData>
+                <texPath>Things/Building/Door/Door_Blueprint</texPath>
+            </blueprintGraphicData>
+            <ai_chillDestination>false</ai_chillDestination>
+            <paintable>true</paintable>
+        </building>
+    </ThingDef>
+
+    <ThingDef ParentName="InbetweenDoor">
+        <defName>IB_ReturnDoor</defName>
+        <thingClass>Inbetween.Inbetween.Building_ReturnDoor</thingClass>
+    </ThingDef>
+</Defs>
