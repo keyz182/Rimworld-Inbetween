@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <LayoutRoomDef>
+        <defName>IB_LabyrinthDoor</defName>
+        <roomContentsWorkerType>Inbetween.MapGen.Labyrinth.RoomContentsDoor</roomContentsWorkerType>
+        <dontPlaceRandomly>true</dontPlaceRandomly>
+        <isValidPlayerSpawnRoom>false</isValidPlayerSpawnRoom>
+    </LayoutRoomDef>
+
+    <LayoutRoomDef>
+        <defName>IB_LabyrinthReturnDoor</defName>
+        <roomContentsWorkerType>Inbetween.MapGen.Labyrinth.RoomContentsReturnDoor</roomContentsWorkerType>
+        <dontPlaceRandomly>true</dontPlaceRandomly>
+        <isValidPlayerSpawnRoom>true</isValidPlayerSpawnRoom>
+    </LayoutRoomDef>
+
+</Defs>

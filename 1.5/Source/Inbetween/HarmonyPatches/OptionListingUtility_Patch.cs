@@ -25,8 +25,8 @@ public static class OptionListingUtility_Patch
             GenText.RandomSeedString(),
             OverallRainfall.Normal,
             OverallTemperature.Normal,
-            OverallPopulation.AlmostNone,
-            new List<FactionDef> { FactionDefOf.OutlanderRefugee });
+            OverallPopulation.AlmostNone);
+        // new List<FactionDef> { FactionDefOf.OutlanderRefugee });
         Find.GameInitData.ChooseRandomStartingTile();
         Find.GameInitData.mapSize = 75;
         Find.Scenario.PostIdeoChosen();

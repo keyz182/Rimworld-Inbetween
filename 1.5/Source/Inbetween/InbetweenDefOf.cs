@@ -13,5 +13,10 @@ public static class InbetweenDefOf
     public static GenStepDef IB_GenStep_InbetweenDoor;
     public static GenStepDef IB_GenStep_InbetweenReturnDoor;
 
+    public static LayoutDef IB_LabyrinthZone;
+
+    public static LayoutRoomDef IB_LabyrinthDoor;
+    public static LayoutRoomDef IB_LabyrinthReturnDoor;
+
     static InbetweenDefOf() => DefOfHelper.EnsureInitializedInCtor(typeof(InbetweenDefOf));
 }

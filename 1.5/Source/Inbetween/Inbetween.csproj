@@ -77,7 +77,7 @@
       <Link>Inbetween\1.5\Defs\Inbetween_Buildings.xml</Link>
     </ReleaseFiles>
     
-    <ReleaseFiles Update="..\..\Defs\Inbetween_EmptyZone.xml">
+    <ReleaseFiles Update="..\..\Defs\Inbetween_Zone.xml">
       <Link>Inbetween\1.5\Defs\Inbetween_EmptyZone.xml</Link>
     </ReleaseFiles>
     
@@ -88,11 +88,29 @@
     <ReleaseFiles Update="..\..\Defs\Inbetween_Biomes.xml">
       <Link>_ModFiles\1.5\Defs\Inbetween_Biomes.xml</Link>
     </ReleaseFiles>
+    
+    <ReleaseFiles Remove="_ModFiles\**" />
+    
+    <ReleaseFiles Update="..\..\Defs\Inbetween_LayoutRoom.xml">
+      <Link>Inbetween\1.5\Defs\Inbetween_LayoutRoom.xml</Link>
+    </ReleaseFiles>
+    
+    <ReleaseFiles Update="..\..\Defs\Inbetween_Biomes.xml">
+      <Link>Inbetween\1.5\Defs\Inbetween_Biomes.xml</Link>
+    </ReleaseFiles>
+    
+    <ReleaseFiles Update="..\..\Defs\Inbetween_GenSteps.xml">
+      <Link>Inbetween\1.5\Defs\Inbetween_GenSteps.xml</Link>
+    </ReleaseFiles>
   </ItemGroup>
   <ItemGroup>
-    <ReleaseFiles Include="..\..\Defs\Inbetween_MapGenerators.xml">
-      <Link>Inbetween\1.5\Defs\Inbetween_MapGenerators.xml</Link>
-    </ReleaseFiles>
+    <Compile Remove="_ModFiles\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="_ModFiles\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="_ModFiles\**" />
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="Build" Condition=" '$(Configuration)' == 'Release' ">
     <RemoveDir Condition="Exists('../../../Release')" Directories="../../../Release" />

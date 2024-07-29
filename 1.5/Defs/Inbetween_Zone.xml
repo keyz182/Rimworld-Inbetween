@@ -7,4 +7,9 @@
         <mapGenerator>IB_EmptyZoneMapGen</mapGenerator>
     </Inbetween.Mapping.InbetweenZoneDef>
 
+    <Inbetween.Mapping.InbetweenZoneDef>
+        <defName>IB_LabyrinthZone</defName>
+        <mapGenerator>IB_LabyrinthZoneMapGen</mapGenerator>
+    </Inbetween.Mapping.InbetweenZoneDef>
+
 </Defs>

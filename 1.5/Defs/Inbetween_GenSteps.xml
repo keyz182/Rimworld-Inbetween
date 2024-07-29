@@ -15,9 +15,15 @@
     </GenStepDef>
 
     <GenStepDef>
-        <defName>TerrainEmpty</defName>
+        <defName>IB_GenStep_TerrainEmpty</defName>
         <order>210</order>
         <genStep Class="Inbetween.MapGen.GenStep_TerrainEmpty"/>
+    </GenStepDef>
+
+    <GenStepDef>
+        <defName>IB_GenStep_LabyrinthZone</defName>
+        <order>210</order>
+        <genStep Class="Inbetween.MapGen.Labyrinth.GenStep_LabyrinthZone"/>
     </GenStepDef>
 
 </Defs>

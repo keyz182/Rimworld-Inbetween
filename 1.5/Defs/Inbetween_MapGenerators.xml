@@ -34,10 +34,30 @@
 
         <genSteps>
             <li>ElevationFertility</li>
-            <li>TerrainEmpty</li>
+            <li>IB_GenStep_TerrainEmpty</li>
             <li>ScenParts</li>
             <li>IB_GenStep_InbetweenDoor</li>
             <li>IB_GenStep_InbetweenReturnDoor</li>
+        </genSteps>
+    </MapGeneratorDef>
+
+
+    <MapGeneratorDef>
+        <defName>IB_LabyrinthZoneMapGen</defName>
+        <label>labyrinth zone</label>
+        <ignoreAreaRevealedLetter>true</ignoreAreaRevealedLetter>
+        <disableShadows>true</disableShadows>
+        <disableCallAid>true</disableCallAid>
+        <customMapComponents>
+            <li>Inbetween.MapGen.Labyrinth.LabyrinthZoneMapComponent</li>
+        </customMapComponents>
+        <pocketMapProperties>
+            <biome>Labyrinth</biome>
+            <temperature>25</temperature>
+        </pocketMapProperties>
+        <genSteps>
+            <li>IB_GenStep_LabyrinthZone</li>
+            <li>RockChunks</li>
         </genSteps>
     </MapGeneratorDef>
 </Defs>

@@ -89,17 +89,6 @@ public class InbetweenGameComponent : GameComponent
             List<GenStepWithParams> extraSteps = new List<GenStepWithParams>();
             InbetweenZoneDef newMapDef = NextMapGen();
 
-            //Skip these if it's already defined in the mapgen
-            if (!newMapDef.mapGenerator.genSteps.Any(s => s == InbetweenDefOf.IB_GenStep_InbetweenDoor))
-            {
-                extraSteps.Add(new GenStepWithParams(InbetweenDefOf.IB_GenStep_InbetweenDoor, new GenStepParams()));
-            }
-
-            if (!newMapDef.mapGenerator.genSteps.Any(s => s == InbetweenDefOf.IB_GenStep_InbetweenReturnDoor))
-            {
-                extraSteps.Add(new GenStepWithParams(InbetweenDefOf.IB_GenStep_InbetweenReturnDoor, new GenStepParams()));
-            }
-
             // Generate the pocket map
             PocketMapParent parent = WorldObjectMaker.MakeWorldObject(WorldObjectDefOf.PocketMap) as PocketMapParent;
             if (parent == null)
@@ -108,7 +97,7 @@ public class InbetweenGameComponent : GameComponent
             }
 
             parent.sourceMap = RootMap;
-            IntVec3 mapSize = new IntVec3(75, 1, 75);
+            IntVec3 mapSize = new IntVec3(50, 1, 50);
             MapGeneratorDef gen = newMapDef.mapGenerator;
 
             nextSubMap = MapGenerator.GenerateMap(mapSize, parent, gen, extraSteps, isPocketMap: true);
