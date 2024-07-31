@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using System.Linq;
+using HarmonyLib;
 using RimWorld;
 using Verse;
 
@@ -37,5 +38,12 @@ public class GenStep_LabyrinthZone : GenStep
         MapGenerator.PlayerStartSpot = IntVec3.Zero;
 
         AccessTools.Method(typeof(FogGrid), "SetAllFogged").Invoke(map.fogGrid, []);
+
+        LayoutRoom returnroom = structureSketch.layoutSketch.layout.Rooms.First(r => r.requiredDef == InbetweenDefOf.IB_LabyrinthReturnDoor);
+
+        foreach (IntVec3 cell in returnroom.Cells)
+        {
+            map.fogGrid.Unfog(cell);
+        }
     }
 }

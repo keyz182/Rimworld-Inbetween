@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
 using RimWorld;
@@ -46,25 +47,9 @@ public class LayoutWorkerLabyrinthZone : LayoutWorkerLabyrinth
         FillEdges(rect, sketch);
         CellRect cellRect = rect.ContractedBy(2);
         parms.size = new IntVec2(cellRect.Width, cellRect.Height);
-        ProfilerBlock profilerBlock = new ProfilerBlock("Generate Labyrinth");
-        try
-        {
-            sketch.layout = GenerateLabyrinth(parms);
-        }
-        finally
-        {
-            profilerBlock.Dispose();
-        }
 
-        profilerBlock = new ProfilerBlock("Flush");
-        try
-        {
-            sketch.FlushLayoutToSketch(new IntVec3(2, 0, 2));
-        }
-        finally
-        {
-            profilerBlock.Dispose();
-        }
+        sketch.layout = GenerateLabyrinth(parms);
+        sketch.FlushLayoutToSketch(new IntVec3(2, 0, 2));
 
         return sketch;
     }
@@ -75,84 +60,21 @@ public class LayoutWorkerLabyrinthZone : LayoutWorkerLabyrinth
         CellRect cellRect = new CellRect(0, 0, parms.size.x, parms.size.z);
         layout.Init(cellRect);
 
-        LayoutRoom returnRoom = PlaceDoorRoom(cellRect, layout, InbetweenDefOf.IB_LabyrinthReturnDoor);
+        LayoutRoom returnRoom = PlaceReturnDoorRoom(cellRect, layout);
+        LayoutRoom exitRoom = PlaceExitDoorRoom(cellRect, layout);
 
-        ProfilerBlock profilerBlock = new ProfilerBlock("Scatter L Rooms");
-        try
-        {
-            ScatterLRooms(cellRect, layout);
-        }
-        finally
-        {
-            profilerBlock.Dispose();
-        }
-
-        profilerBlock = new ProfilerBlock("Scatter Square Rooms");
-        try
-        {
-            ScatterSquareRooms(cellRect, layout);
-        }
-        finally
-        {
-            profilerBlock.Dispose();
-        }
-
-        profilerBlock = new ProfilerBlock("Generate Graphs");
-        try
-        {
-            GenerateGraphs(layout);
-        }
-        finally
-        {
-            profilerBlock.Dispose();
-        }
-
+        ScatterLRooms(cellRect, layout);
+        ScatterSquareRooms(cellRect, layout);
+        GenerateGraphs(layout);
         layout.FinalizeRooms(false);
-        profilerBlock = new ProfilerBlock("Create Doors");
-        try
-        {
-            CreateDoors(layout);
-        }
-        finally
-        {
-            profilerBlock.Dispose();
-        }
-
-        profilerBlock = new ProfilerBlock("Create Corridors");
-        try
-        {
-            CreateCorridorsAStar(layout);
-        }
-        finally
-        {
-            profilerBlock.Dispose();
-        }
-
-        profilerBlock = new ProfilerBlock("Find Room For Door");
-        try
-        {
-            List<LayoutRoom> rooms = GetDoorableRooms(layout, returnRoom);
-            rooms.RandomElement().requiredDef = InbetweenDefOf.IB_LabyrinthDoor;
-        }
-        finally
-        {
-            profilerBlock.Dispose();
-        }
-
-        profilerBlock = new ProfilerBlock("Fill Empty Spaces");
-        try
-        {
-            FillEmptySpaces(layout);
-        }
-        finally
-        {
-            profilerBlock.Dispose();
-        }
+        CreateDoors(layout);
+        CreateCorridorsAStar(layout);
+        FillEmptySpaces(layout);
 
         return layout;
     }
 
-    private static LayoutRoom PlaceDoorRoom(CellRect size, StructureLayout layout, LayoutRoomDef doorDef)
+    private static LayoutRoom PlaceReturnDoorRoom(CellRect size, StructureLayout layout)
     {
         //Randomize size
         int maxWidth = RoomSizeRange.RandomInRange;
@@ -170,12 +92,40 @@ public class LayoutWorkerLabyrinthZone : LayoutWorkerLabyrinth
 
 
         LayoutRoom layoutRoom = layout.AddRoom(new List<CellRect> { cellRect });
-        layoutRoom.requiredDef = doorDef;
+        layoutRoom.requiredDef = InbetweenDefOf.IB_LabyrinthReturnDoor;
+        layoutRoom.defs = new List<LayoutRoomDef>();
         layoutRoom.entryCells = new List<IntVec3>();
         layoutRoom.entryCells.AddRange(cellRect.GetCenterCellsOnEdge(Rot4.North, 2));
         layoutRoom.entryCells.AddRange(cellRect.GetCenterCellsOnEdge(Rot4.East, 2));
         layoutRoom.entryCells.AddRange(cellRect.GetCenterCellsOnEdge(Rot4.South, 2));
         layoutRoom.entryCells.AddRange(cellRect.GetCenterCellsOnEdge(Rot4.West, 2));
+
+        return layoutRoom;
+    }
+
+    private static LayoutRoom PlaceExitDoorRoom(CellRect size, StructureLayout layout)
+    {
+        LayoutRoom layoutRoom = null;
+
+        for (int index = 0; index < 10; ++index)
+        {
+            int width = RoomSizeRange.RandomInRange;
+            int height = RoomSizeRange.RandomInRange;
+            CellRect rect = new CellRect(Rand.Range(0, size.Width - width), Rand.Range(0, size.Height - height), width, height);
+            if (!OverlapsWithAnyRoom(layout, rect))
+            {
+                layoutRoom = layout.AddRoom(new List<CellRect> { rect });
+                break;
+            }
+        }
+
+        if (layoutRoom == null)
+        {
+            throw new Exception("Failed to generate exit room in 10 tries");
+        }
+
+        layoutRoom.requiredDef = InbetweenDefOf.IB_LabyrinthDoor;
+        layoutRoom.defs = new List<LayoutRoomDef>();
 
         return layoutRoom;
     }
@@ -219,6 +169,11 @@ public class LayoutWorkerLabyrinthZone : LayoutWorkerLabyrinth
         }
 
         return list;
+    }
+
+    private static bool OverlapsWithAnyRoom(StructureLayout layout, CellRect rect)
+    {
+        return (bool) AccessTools.Method(typeof(LayoutWorkerLabyrinth), "OverlapsWithAnyRoom", [typeof(StructureLayout), typeof(CellRect)]).Invoke(null, [layout, rect]);
     }
 
     private static void FillEmptySpaces(StructureLayout layout)

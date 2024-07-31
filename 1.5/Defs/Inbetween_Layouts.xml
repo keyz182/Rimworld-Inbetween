@@ -4,8 +4,7 @@
     <LayoutDef>
         <defName>IB_LabyrinthZone</defName>
         <workerClass>Inbetween.MapGen.Labyrinth.LayoutWorkerLabyrinthZone</workerClass>
-        <canHaveMultipleLayoutsInRoom>true</canHaveMultipleLayoutsInRoom>
-        <multipleLayoutRoomChance>0.15</multipleLayoutRoomChance>
+        <canHaveMultipleLayoutsInRoom>false</canHaveMultipleLayoutsInRoom>
         <roomDefs>
             <li>LabyrinthEmpty</li>
             <li>LabyrinthEndlessPit</li>

@@ -13,6 +13,9 @@ public class InbetweenGameComponent : GameComponent
 
     public bool InbetweenQuickplayMode = false;
 
+    public static bool CurrentlyGenerating = false;
+    public static List<Action> GenerationPostActions = new List<Action>();
+
     // currently held pocket maps
     public List<Map> Maps = new List<Map>();
 
@@ -74,8 +77,43 @@ public class InbetweenGameComponent : GameComponent
         retDoor.inbetweenDoor = RootDoor;
     }
 
-    public bool TryGenerateNextMap(Building_InbetweenDoor door)
+    public void TryGenerateNextMap(Building_InbetweenDoor door, Action callback)
     {
+        if (CurrentlyGenerating)
+        {
+            Log.Error("Attempted to generate maps simultaneously!");
+            GenerationPostActions.Add(callback);
+            return;
+        }
+
+        LongEventHandler.QueueLongEvent(() =>
+            {
+                TryGenerateNextMapInt(door);
+            },
+            "Inbetween_GeneratingInbetween",
+            true,
+            GameAndMapInitExceptionHandlers.ErrorWhileGeneratingMap,
+            true,
+            delegate
+            {
+                foreach (Action action in GenerationPostActions)
+                {
+                    action();
+                }
+
+                GenerationPostActions.Clear();
+            });
+    }
+
+    public bool TryGenerateNextMapInt(Building_InbetweenDoor door)
+    {
+        if (CurrentlyGenerating)
+        {
+            Log.Error("Attempted to generate maps simultaneously!");
+            return false;
+        }
+
+        CurrentlyGenerating = true;
         // we can't generate yet
         if (!CanDoNextMap(door))
         {
@@ -150,6 +188,10 @@ public class InbetweenGameComponent : GameComponent
             }
 
             throw;
+        }
+        finally
+        {
+            CurrentlyGenerating = false;
         }
 
         return true;

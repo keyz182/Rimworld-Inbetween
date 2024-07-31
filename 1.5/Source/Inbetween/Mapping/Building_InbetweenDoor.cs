@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using RimWorld;
@@ -96,10 +97,22 @@ public class Building_InbetweenDoor : MapPortal
     {
         if (nextMap == null)
         {
-            IbGameComponent.TryGenerateNextMap(this);
+            IbGameComponent.TryGenerateNextMapInt(this);
         }
 
         return nextMap;
+    }
+
+    public virtual void EnsureMap(Action callback = null)
+    {
+        if (nextMap == null)
+        {
+            IbGameComponent.TryGenerateNextMap(this, callback);
+        }
+        else
+        {
+            callback?.Invoke();
+        }
     }
 
     public override IntVec3 GetDestinationLocation()
