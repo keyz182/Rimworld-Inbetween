@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
 using RimWorld;
-using UnityEngine;
 using Verse;
 
 namespace Inbetween.MapGen.Labyrinth;
@@ -60,12 +59,21 @@ public class LayoutWorkerLabyrinthZone : LayoutWorkerLabyrinth
         CellRect cellRect = new CellRect(0, 0, parms.size.x, parms.size.z);
         layout.Init(cellRect);
 
-        LayoutRoom returnRoom = PlaceReturnDoorRoom(cellRect, layout);
-        LayoutRoom exitRoom = PlaceExitDoorRoom(cellRect, layout);
+        LayoutRoom returnRoom = PlaceDoorRoom(cellRect, layout, InbetweenDefOf.IB_LabyrinthReturnDoor);
+        LayoutRoom exitRoom = PlaceDoorRoom(cellRect, layout, InbetweenDefOf.IB_LabyrinthDoor);
 
         ScatterLRooms(cellRect, layout);
         ScatterSquareRooms(cellRect, layout);
-        GenerateGraphs(layout);
+        try
+        {
+            GenerateGraphs(layout);
+        }
+        catch (ArgumentOutOfRangeException)
+        {
+            ModLog.Warn("Delaunator needs at least 3 points");
+            return null;
+        }
+
         layout.FinalizeRooms(false);
         CreateDoors(layout);
         CreateCorridorsAStar(layout);
@@ -74,57 +82,32 @@ public class LayoutWorkerLabyrinthZone : LayoutWorkerLabyrinth
         return layout;
     }
 
-    private static LayoutRoom PlaceReturnDoorRoom(CellRect size, StructureLayout layout)
-    {
-        //Randomize size
-        int maxWidth = RoomSizeRange.RandomInRange;
-        int maxHeight = RoomSizeRange.RandomInRange;
-        int minX = Rand.Range(0, size.Width - maxWidth);
-        int minZ = Rand.Range(0, size.Height - maxHeight);
-        int width = LShapeRoomRange.RandomInRange;
-        int height = LShapeRoomRange.RandomInRange;
-        for (; Mathf.Abs(width - maxWidth) <= 2; width = LShapeRoomRange.RandomInRange) { }
-
-        for (; Mathf.Abs(height - maxHeight) <= 2; height = LShapeRoomRange.RandomInRange) { }
-
-        CellRect rect = new CellRect(minX, minZ, maxWidth, maxHeight);
-        CellRect cellRect = !Rand.Bool ? new CellRect(rect.minX - width, rect.minZ, width + 1, height) : new CellRect(rect.maxX, rect.maxZ - height + 1, width, height);
-
-
-        LayoutRoom layoutRoom = layout.AddRoom(new List<CellRect> { cellRect });
-        layoutRoom.requiredDef = InbetweenDefOf.IB_LabyrinthReturnDoor;
-        layoutRoom.defs = new List<LayoutRoomDef>();
-        layoutRoom.entryCells = new List<IntVec3>();
-        layoutRoom.entryCells.AddRange(cellRect.GetCenterCellsOnEdge(Rot4.North, 2));
-        layoutRoom.entryCells.AddRange(cellRect.GetCenterCellsOnEdge(Rot4.East, 2));
-        layoutRoom.entryCells.AddRange(cellRect.GetCenterCellsOnEdge(Rot4.South, 2));
-        layoutRoom.entryCells.AddRange(cellRect.GetCenterCellsOnEdge(Rot4.West, 2));
-
-        return layoutRoom;
-    }
-
-    private static LayoutRoom PlaceExitDoorRoom(CellRect size, StructureLayout layout)
+    private static LayoutRoom PlaceDoorRoom(CellRect size, StructureLayout layout, LayoutRoomDef Door)
     {
         LayoutRoom layoutRoom = null;
 
         for (int index = 0; index < 10; ++index)
         {
-            int width = RoomSizeRange.RandomInRange;
-            int height = RoomSizeRange.RandomInRange;
-            CellRect rect = new CellRect(Rand.Range(0, size.Width - width), Rand.Range(0, size.Height - height), width, height);
-            if (!OverlapsWithAnyRoom(layout, rect))
+            CellRect cellRect = new CellRect(Rand.Range(0, size.Width - 7), Rand.Range(0, size.Height - 7), 7, 7);
+
+            if (!OverlapsWithAnyRoom(layout, cellRect))
             {
-                layoutRoom = layout.AddRoom(new List<CellRect> { rect });
+                layoutRoom = layout.AddRoom(new List<CellRect> { cellRect });
+                layoutRoom.entryCells = new List<IntVec3>();
+                layoutRoom.entryCells.AddRange(cellRect.GetCenterCellsOnEdge(Rot4.North, 2));
+                layoutRoom.entryCells.AddRange(cellRect.GetCenterCellsOnEdge(Rot4.East, 2));
+                layoutRoom.entryCells.AddRange(cellRect.GetCenterCellsOnEdge(Rot4.South, 2));
+                layoutRoom.entryCells.AddRange(cellRect.GetCenterCellsOnEdge(Rot4.West, 2));
                 break;
             }
         }
 
         if (layoutRoom == null)
         {
-            throw new Exception("Failed to generate exit room in 10 tries");
+            throw new Exception("Failed to generate door room in 10 tries");
         }
 
-        layoutRoom.requiredDef = InbetweenDefOf.IB_LabyrinthDoor;
+        layoutRoom.requiredDef = Door;
         layoutRoom.defs = new List<LayoutRoomDef>();
 
         return layoutRoom;

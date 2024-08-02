@@ -18,5 +18,7 @@ public static class InbetweenDefOf
     public static LayoutRoomDef IB_LabyrinthDoor;
     public static LayoutRoomDef IB_LabyrinthReturnDoor;
 
+    public static JobDef IB_OpenDoor;
+
     static InbetweenDefOf() => DefOfHelper.EnsureInitializedInCtor(typeof(InbetweenDefOf));
 }

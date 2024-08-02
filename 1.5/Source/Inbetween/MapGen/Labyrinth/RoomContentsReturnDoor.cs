@@ -13,7 +13,7 @@ public class RoomContentsReturnDoor : RoomContentsWorker
             return;
         }
 
-        Log.Message("Placing Entry Door");
+        ModLog.Log("Placing Entry Door");
         GenSpawn.Spawn(ThingMaker.MakeThing(InbetweenDefOf.IB_ReturnDoor, ThingDefOf.WoodLog), cell, map, Rot4.North);
     }
 }

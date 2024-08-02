@@ -13,7 +13,7 @@
         <graphicData>
             <texPath>Buildings/IB_Door</texPath>
             <graphicClass>Graphic_Single</graphicClass>
-            <drawSize>2</drawSize>
+            <drawSize>(2,2)</drawSize>
             <damageData>
                 <!--  no damage marks because they don't move with the door  -->
                 <enabled>false</enabled>
@@ -22,7 +22,7 @@
         <size>(2,2)</size>
 
         <modExtensions>
-            <li Class="Inbetween.Mapping.IB_DoorExtension">
+            <li Class="Inbetween.Buildings.IB_DoorExtension">
                 <extraGraphicData>
                     <texPath>Buildings/IB_DoorClosed</texPath>
                     <graphicClass>Graphic_Single</graphicClass>
@@ -35,7 +35,7 @@
             </li>
         </modExtensions>
 
-        <thingClass>Inbetween.Mapping.Building_InbetweenDoor</thingClass>
+        <thingClass>Inbetween.Buildings.Building_InbetweenDoor</thingClass>
         <category>Building</category>
         <altitudeLayer>DoorMoveable</altitudeLayer>
         <fillPercent>1</fillPercent>
@@ -82,7 +82,7 @@
     <ThingDef ParentName="InbetweenDoor">
         <defName>IB_ReturnDoor</defName>
         <label>Return Door</label>
-        <thingClass>Inbetween.Mapping.Building_ReturnDoor</thingClass>
+        <thingClass>Inbetween.Buildings.Building_ReturnDoor</thingClass>
 
     </ThingDef>
 </Defs>

@@ -20,7 +20,7 @@ public static class Game_Patch
         if (!Current.Game.GetComponent<InbetweenGameComponent>().InbetweenQuickplayMode)
             return true;
 
-        Log.Message("Initializing new game with mods:\n" + LoadedModManager.RunningMods
+        ModLog.Log("Initializing new game with mods:\n" + LoadedModManager.RunningMods
             .Select(mod => mod.PackageIdPlayerFacing + (!mod.ModMetaData.VersionCompatible ? " (incompatible version)" : "")).ToLineList("  - "));
 
         FieldInfo mapsField = AccessTools.Field(typeof(Game), "maps");
@@ -34,10 +34,10 @@ public static class Game_Patch
         World worldInt = (World) worldIntField.GetValue(__instance);
 
         if (maps.Any())
-            Log.Error("Called InitNewGame() but there already is a map. There should be 0 maps...");
+            ModLog.Error("Called InitNewGame() but there already is a map. There should be 0 maps...");
         else if (initData == null)
         {
-            Log.Error("Called InitNewGame() but init data is null. Create it first.");
+            ModLog.Error("Called InitNewGame() but init data is null. Create it first.");
         }
         else
         {
@@ -53,7 +53,7 @@ public static class Game_Patch
                 Settlement parent = settlements.FirstOrDefault(s => s.Faction == Faction.OfPlayer);
 
                 if (parent == null)
-                    Log.Error("Could not generate starting map because there is no any player faction base.");
+                    ModLog.Error("Could not generate starting map because there is no any player faction base.");
 
                 __instance.tickManager.gameStartAbsTick = GenTicks.ConfiguredTicksAbsAtGameStart;
                 info.startingTile = initData.startingTile;

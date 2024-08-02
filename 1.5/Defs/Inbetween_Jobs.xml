@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <JobDef>
+        <defName>IB_OpenDoor</defName>
+        <driverClass>Inbetween.Jobs.JobDriver_OpenDoor</driverClass>
+        <dropThingBeforeJob>false</dropThingBeforeJob>
+        <carryThingAfterJob>true</carryThingAfterJob>
+        <reportString>opening TargetA.</reportString>
+    </JobDef>
+
+</Defs>

@@ -1,15 +1,31 @@
-﻿using System.Collections.Generic;
-using RimWorld;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using Verse;
 
-namespace Inbetween.Mapping;
+namespace Inbetween.Buildings;
 
-public class Building_ReturnDoor : MapPortal
+public class Building_ReturnDoor : Building_IBPortal
 {
     public override string EnterCommandString => "Inbetween_EnterDoor".Translate();
     public override bool AutoDraftOnEnter => true;
 
     public Building_InbetweenDoor inbetweenDoor;
+
+
+    public override bool IsOpen()
+    {
+        return true;
+    }
+
+    public override void EnsureMap(Action callback)
+    {
+        callback();
+    }
+
+    public override void EnsureMap()
+    {
+    }
 
     private static readonly CachedTexture ViewUndercaveTex = new CachedTexture("UI/Commands/ViewUndercave");
 
@@ -56,5 +72,13 @@ public class Building_ReturnDoor : MapPortal
             CameraJumper.TryJumpAndSelect(inbetweenDoor, CameraJumper.MovementMode.Pan);
         };
         yield return gizmo;
+    }
+
+    public override void Destroy(DestroyMode mode = DestroyMode.Vanish)
+    {
+        base.Destroy(mode);
+        ModLog.Warn("Return door destroyed!");
+        StackTrace t = new StackTrace();
+        ModLog.Warn(t.ToStringSafe());
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Inbetween.Buildings;
 using RimWorld;
 using RimWorld.Planet;
 using Verse;
@@ -12,7 +13,6 @@ public class InbetweenGameComponent : GameComponent
     // Game component to manage the inbetween lifecycle
 
     public bool InbetweenQuickplayMode = false;
-
     public static bool CurrentlyGenerating = false;
     public static List<Action> GenerationPostActions = new List<Action>();
 
@@ -79,9 +79,10 @@ public class InbetweenGameComponent : GameComponent
 
     public void TryGenerateNextMap(Building_InbetweenDoor door, Action callback)
     {
+        ModLog.Log("Requesting generation of Pocket Map");
         if (CurrentlyGenerating)
         {
-            Log.Error("Attempted to generate maps simultaneously!");
+            ModLog.Error("Attempted to generate maps simultaneously!");
             GenerationPostActions.Add(callback);
             return;
         }
@@ -92,7 +93,12 @@ public class InbetweenGameComponent : GameComponent
             },
             "Inbetween_GeneratingInbetween",
             true,
-            GameAndMapInitExceptionHandlers.ErrorWhileGeneratingMap,
+            delegate
+            {
+                DelayedErrorWindowRequest.Add("ErrorWhileGeneratingMap".Translate(), "ErrorWhileGeneratingMapTitle".Translate());
+                Scribe.ForceStop();
+                GenScene.GoToMainMenu();
+            },
             true,
             delegate
             {
@@ -107,9 +113,10 @@ public class InbetweenGameComponent : GameComponent
 
     public bool TryGenerateNextMapInt(Building_InbetweenDoor door)
     {
+        ModLog.Log("Generating Pocket Map");
         if (CurrentlyGenerating)
         {
-            Log.Error("Attempted to generate maps simultaneously!");
+            ModLog.Error("Attempted to generate maps simultaneously!");
             return false;
         }
 
@@ -163,7 +170,7 @@ public class InbetweenGameComponent : GameComponent
             {
                 Map poppedMap = Maps.PopFront();
 
-                poppedMap.AllCells.ToList().ForEach(c => poppedMap.thingGrid.ThingsAt(c).ToList().ForEach(t => t.Destroy()));
+                // poppedMap.AllCells.ToList().ForEach(c => poppedMap.thingGrid.ThingsAt(c).ToList().ForEach(t => t.Destroy()));
 
                 PocketMapUtility.DestroyPocketMap(poppedMap);
                 Current.Game.Maps.Remove(poppedMap);
@@ -171,11 +178,13 @@ public class InbetweenGameComponent : GameComponent
                 UpdateRoot();
             }
 
+            door.Open = true;
+
             Maps.Add(nextSubMap);
         }
         catch (Exception e)
         {
-            Log.Error("Unknown error generating pocket map -> " + e.ToStringSafe());
+            ModLog.Error("Unknown error generating pocket map -> " + e.ToStringSafe());
 
             if (nextSubMap != null)
             {

@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using RimWorld;
+using Inbetween.Mapping;
 using Verse;
 
-namespace Inbetween.Mapping;
+namespace Inbetween.Buildings;
 
 public class IB_DoorExtension : DefModExtension
 {
     public GraphicData extraGraphicData;
 }
 
-public class Building_InbetweenDoor : MapPortal
+public class Building_InbetweenDoor : Building_IBPortal
 {
     private IB_DoorExtension defExtension;
 
@@ -21,11 +22,12 @@ public class Building_InbetweenDoor : MapPortal
     // The map this door will take you to
     public Map nextMap;
 
+    public bool Open = false;
 
     // Handle alt texture for door closed
     private Graphic doorClosedGraphic;
     protected bool HasExtension => defExtension != null;
-    public virtual bool ShouldUseAlternative => HasExtension && defExtension.extraGraphicData != null && !IbGameComponent.CanDoNextMap(this);
+    public virtual bool ShouldUseAlternative => HasExtension && defExtension.extraGraphicData != null && !IbGameComponent.CanDoNextMap(this) && Open;
     public override Graphic Graphic => ShouldUseAlternative ? AlternateGraphic : base.Graphic;
 
     protected Graphic AlternateGraphic
@@ -60,6 +62,11 @@ public class Building_InbetweenDoor : MapPortal
     public InbetweenGameComponent IbGameComponent => Current.Game.GetComponent<InbetweenGameComponent>();
 
 
+    public override bool IsOpen()
+    {
+        return Open;
+    }
+
     public override void SpawnSetup(Map map, bool respawningAfterLoad)
     {
         base.SpawnSetup(map, respawningAfterLoad);
@@ -77,7 +84,7 @@ public class Building_InbetweenDoor : MapPortal
 
         if (Current.Game.GetComponent<InbetweenGameComponent>().RootDoor != null)
         {
-            Log.Error("Cannot spawn multiple root doors");
+            ModLog.Error("Cannot spawn multiple root doors");
             Destroy();
             return;
         }
@@ -95,15 +102,10 @@ public class Building_InbetweenDoor : MapPortal
 
     public override Map GetOtherMap()
     {
-        if (nextMap == null)
-        {
-            IbGameComponent.TryGenerateNextMapInt(this);
-        }
-
         return nextMap;
     }
 
-    public virtual void EnsureMap(Action callback = null)
+    public override void EnsureMap(Action callback)
     {
         if (nextMap == null)
         {
@@ -113,6 +115,11 @@ public class Building_InbetweenDoor : MapPortal
         {
             callback?.Invoke();
         }
+    }
+
+    public override void EnsureMap()
+    {
+        EnsureMap(null);
     }
 
     public override IntVec3 GetDestinationLocation()
@@ -137,6 +144,12 @@ public class Building_InbetweenDoor : MapPortal
     public override bool IsEnterable(out string reason)
     {
         reason = "";
+        if (GetOtherMap() == null)
+        {
+            reason = "IB_DoorNotOpen".Translate();
+            return false;
+        }
+
         if (!IbGameComponent.CanDoNextMap(this))
         {
             reason = "IB_PawnsWouldBeStuck".Translate();
@@ -173,5 +186,13 @@ public class Building_InbetweenDoor : MapPortal
         StringBuilder sb = new StringBuilder(IbGameComponent.CanDoNextMap(this) ? "IB_Open".Translate() : "IB_Closed".Translate());
         sb.Append(base.GetInspectString());
         return sb.ToString();
+    }
+
+    public override void Destroy(DestroyMode mode = DestroyMode.Vanish)
+    {
+        base.Destroy(mode);
+        ModLog.Warn("Return door destroyed!");
+        StackTrace t = new StackTrace();
+        ModLog.Warn(t.ToStringSafe());
     }
 }

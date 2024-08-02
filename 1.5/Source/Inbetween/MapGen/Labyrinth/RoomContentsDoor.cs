@@ -13,7 +13,7 @@ public class RoomContentsDoor : RoomContentsWorker
             return;
         }
 
-        Log.Message("Placing Exit Door");
+        ModLog.Log("Placing Exit Door");
         GenSpawn.Spawn(ThingMaker.MakeThing(InbetweenDefOf.IB_Door, ThingDefOf.WoodLog), cell, map, Rot4.North);
     }
 }

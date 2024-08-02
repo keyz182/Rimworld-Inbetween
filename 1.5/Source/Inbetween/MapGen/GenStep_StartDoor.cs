@@ -17,13 +17,33 @@ public class GenStep_StartDoor : GenStep_Scatterer
         base.Generate(map, parms);
     }
 
+    private bool CanPlaceDoorAt(IntVec3 cell, Map map)
+    {
+        CellRect cellRect = GenAdj.OccupiedRect(cell, Rot4.North, InbetweenDefOf.IB_ReturnDoor.Size).ExpandedBy(1);
+        foreach (IntVec3 c in cellRect)
+        {
+            if (c.GetEdifice(map) != null)
+            {
+                return false;
+            }
+
+            if (c.GetThingList(map).Any())
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     protected override bool CanScatterAt(IntVec3 c, Map map)
     {
-        if (!base.CanScatterAt(c, map) || !c.Standable(map) || c.Roofed(map))
+        if (!base.CanScatterAt(c, map) || !c.Standable(map) || !CanPlaceDoorAt(c, map))
+        {
             return false;
+        }
 
-        IntVec3 c1 = ThingUtility.InteractionCellWhenAt(InbetweenDefOf.IB_Door, c, InbetweenDefOf.IB_Door.defaultPlacingRot, map);
-        return map.reachability.CanReachMapEdge(c1, TraverseParms.For(TraverseMode.PassDoors));
+        return true;
     }
 
     protected override void ScatterAt(IntVec3 c, Map map, GenStepParams parms, int stackCount = 1)

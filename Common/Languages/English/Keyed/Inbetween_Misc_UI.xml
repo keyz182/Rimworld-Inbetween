@@ -8,4 +8,6 @@
     <IB_Closed>Closed</IB_Closed>
     <Inbetween_SettingsCategory>Inbetween</Inbetween_SettingsCategory>
     <Inbetween_Settings_SettingName>Some Setting</Inbetween_Settings_SettingName>
+    <IB_CannotOpenPortal>Cannot open {0}</IB_CannotOpenPortal>
+    <IB_OpenPortal>Open {0}</IB_OpenPortal>
 </LanguageData>

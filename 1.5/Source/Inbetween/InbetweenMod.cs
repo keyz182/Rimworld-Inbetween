@@ -1,6 +1,6 @@
-﻿using Verse;
+﻿using HarmonyLib;
 using UnityEngine;
-using HarmonyLib;
+using Verse;
 
 namespace Inbetween;
 
@@ -10,14 +10,14 @@ public class InbetweenMod : Mod
 
     public InbetweenMod(ModContentPack content) : base(content)
     {
-        Log.Message("Hello world from Inbetween");
+        ModLog.Log("Hello world from Inbetween");
 
         // initialize settings
         settings = GetSettings<Settings>();
 #if DEBUG
         Harmony.DEBUG = true;
 #endif
-        Harmony harmony = new Harmony("keyz182.rimworld.Inbetween.main");	
+        Harmony harmony = new Harmony("keyz182.rimworld.Inbetween.main");
         harmony.PatchAll();
     }
 
