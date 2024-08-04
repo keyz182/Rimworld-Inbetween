@@ -1,54 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Text;
 using Inbetween.Mapping;
 using Verse;
 
 namespace Inbetween.Buildings;
 
-public class IB_DoorExtension : DefModExtension
-{
-    public GraphicData extraGraphicData;
-}
-
 public class Building_InbetweenDoor : Building_IBPortal
 {
-    private IB_DoorExtension defExtension;
-
-    public Building_ReturnDoor ReturnDoor;
-
-    // The map this door will take you to
-    public Map nextMap;
-
     public bool Open = false;
 
-    // Handle alt texture for door closed
-    private Graphic doorClosedGraphic;
-    protected bool HasExtension => defExtension != null;
-    public virtual bool ShouldUseAlternative => HasExtension && defExtension.extraGraphicData != null && !IbGameComponent.CanDoNextMap(this) && Open;
-    public override Graphic Graphic => ShouldUseAlternative ? AlternateGraphic : base.Graphic;
-
-    protected Graphic AlternateGraphic
-    {
-        get
-        {
-            if (doorClosedGraphic != null)
-            {
-                return doorClosedGraphic;
-            }
-
-            if (!HasExtension || defExtension.extraGraphicData == null)
-            {
-                return BaseContent.BadGraphic;
-            }
-
-            doorClosedGraphic = defExtension.extraGraphicData.GraphicColoredFor(this);
-
-            return doorClosedGraphic;
-        }
-    }
+    public Building_ReturnDoor ReturnDoor => NextMap.ReturnDoor();
 
     // View next map button
     private static readonly CachedTexture ViewNextMapTex = new CachedTexture("UI/Commands/ViewUndercave");
@@ -58,9 +21,16 @@ public class Building_InbetweenDoor : Building_IBPortal
     public override bool AutoDraftOnEnter => true;
 
 
-    // Helper to fetch the game component
-    public InbetweenGameComponent IbGameComponent => Current.Game.GetComponent<InbetweenGameComponent>();
+    public override void ExposeData()
+    {
+        base.ExposeData();
+        Scribe_Values.Look(ref Open, "Open");
+    }
 
+    public override bool ShouldUseAlternative()
+    {
+        return base.ShouldUseAlternative() && Open;
+    }
 
     public override bool IsOpen()
     {
@@ -70,7 +40,6 @@ public class Building_InbetweenDoor : Building_IBPortal
     public override void SpawnSetup(Map map, bool respawningAfterLoad)
     {
         base.SpawnSetup(map, respawningAfterLoad);
-        defExtension = def.GetModExtension<IB_DoorExtension>();
 
         if (map.IsPocketMap)
         {
@@ -93,21 +62,14 @@ public class Building_InbetweenDoor : Building_IBPortal
         Current.Game.GetComponent<InbetweenGameComponent>().RootDoor = this;
     }
 
-    public override void ExposeData()
-    {
-        base.ExposeData();
-        Scribe_References.Look(ref nextMap, "nextMap", false);
-        Scribe_References.Look(ref ReturnDoor, "ReturnDoor", false);
-    }
-
     public override Map GetOtherMap()
     {
-        return nextMap;
+        return NextMap;
     }
 
     public override void EnsureMap(Action callback)
     {
-        if (nextMap == null)
+        if (NextMap == null)
         {
             IbGameComponent.TryGenerateNextMap(this, callback);
         }
@@ -124,21 +86,7 @@ public class Building_InbetweenDoor : Building_IBPortal
 
     public override IntVec3 GetDestinationLocation()
     {
-        if (ReturnDoor != null)
-        {
-            return ReturnDoor.Position;
-        }
-
-        // try to generate a reference to the next map return door if we don't already have it
-        if (nextMap?.listerThings.ThingsOfDef(InbetweenDefOf.IB_ReturnDoor).FirstOrDefault() is not Building_ReturnDoor rDoor)
-        {
-            return IntVec3.Invalid;
-        }
-
-        ReturnDoor = rDoor;
-        rDoor.inbetweenDoor = this;
-
-        return ReturnDoor.Position;
+        return ReturnDoor?.Position ?? IntVec3.Invalid;
     }
 
     public override bool IsEnterable(out string reason)
@@ -166,7 +114,7 @@ public class Building_InbetweenDoor : Building_IBPortal
             yield return gizmo;
         }
 
-        if (nextMap != null)
+        if (NextMap != null)
         {
             Command_Action gizmo = new Command_Action();
             gizmo.defaultLabel = "Inbetween_EnterDoor".Translate();

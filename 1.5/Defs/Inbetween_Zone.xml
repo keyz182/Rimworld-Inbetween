@@ -5,11 +5,29 @@
     <Inbetween.Mapping.InbetweenZoneDef>
         <defName>IB_EmptyZone</defName>
         <mapGenerator>IB_EmptyZoneMapGen</mapGenerator>
+        <eventDefs>
+            <li>Disease_Plague</li>
+            <li>Disease_Malaria</li>
+            <li>Disease_SleepingSickness</li>
+            <li>Disease_FibrousMechanites</li>
+            <li>Disease_SensoryMechanites</li>
+            <li>Disease_GutWorms</li>
+            <li>Disease_MuscleParasites</li>
+        </eventDefs>
     </Inbetween.Mapping.InbetweenZoneDef>
 
     <Inbetween.Mapping.InbetweenZoneDef>
         <defName>IB_LabyrinthZone</defName>
         <mapGenerator>IB_LabyrinthZoneMapGen</mapGenerator>
+        <eventDefs>
+            <li>Disease_Plague</li>
+            <li>Disease_Malaria</li>
+            <li>Disease_SleepingSickness</li>
+            <li>Disease_FibrousMechanites</li>
+            <li>Disease_SensoryMechanites</li>
+            <li>Disease_GutWorms</li>
+            <li>Disease_MuscleParasites</li>
+        </eventDefs>
     </Inbetween.Mapping.InbetweenZoneDef>
 
 </Defs>

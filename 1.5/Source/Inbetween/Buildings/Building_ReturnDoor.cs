@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Inbetween.Mapping;
 using Verse;
 
 namespace Inbetween.Buildings;
@@ -10,13 +11,7 @@ public class Building_ReturnDoor : Building_IBPortal
     public override string EnterCommandString => "Inbetween_EnterDoor".Translate();
     public override bool AutoDraftOnEnter => true;
 
-    public Building_InbetweenDoor inbetweenDoor;
-
-
-    public override bool IsOpen()
-    {
-        return true;
-    }
+    public Building_InbetweenDoor StartDoor => LastMap.StartDoor();
 
     public override void EnsureMap(Action callback)
     {
@@ -31,12 +26,12 @@ public class Building_ReturnDoor : Building_IBPortal
 
     public override Map GetOtherMap()
     {
-        return inbetweenDoor.Map;
+        return LastMap;
     }
 
     public override IntVec3 GetDestinationLocation()
     {
-        return inbetweenDoor.Position;
+        return StartDoor.Position;
     }
 
     public override bool IsEnterable(out string reason)
@@ -46,18 +41,12 @@ public class Building_ReturnDoor : Building_IBPortal
         return true;
     }
 
-    public override void ExposeData()
-    {
-        base.ExposeData();
-        Scribe_References.Look(ref inbetweenDoor, "inbetweenDoor", false);
-    }
-
     public override IEnumerable<Gizmo> GetGizmos()
     {
         foreach (Gizmo g in base.GetGizmos())
             yield return g;
 
-        if (inbetweenDoor == null)
+        if (StartDoor == null)
         {
             yield break;
         }
@@ -69,7 +58,7 @@ public class Building_ReturnDoor : Building_IBPortal
 
         gizmo.action = () =>
         {
-            CameraJumper.TryJumpAndSelect(inbetweenDoor, CameraJumper.MovementMode.Pan);
+            CameraJumper.TryJumpAndSelect(StartDoor, CameraJumper.MovementMode.Pan);
         };
         yield return gizmo;
     }

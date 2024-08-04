@@ -40,7 +40,7 @@ public static class JobDriver_EnterPortal_Patch
         toilTeleport.initAction =
             delegate
             {
-                Map otherMap = door.nextMap;
+                Map otherMap = door.NextMap;
 
                 if (otherMap == null)
                 {
