@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Inbetween.Buildings;
-using Verse;
 using Verse.AI;
 
 namespace Inbetween.Jobs;
@@ -29,19 +28,18 @@ public class JobDriver_OpenDoor : JobDriver
         toilFaceAndWait.handlingFacing = true;
         yield return toilFaceAndWait;
 
-        Toil toilTeleport = ToilMaker.MakeToil();
+        Toil workToOpenDoor = Toils_General.Wait(300, TargetIndex.None)
+            .FailOnCannotTouch(TargetIndex.A, PathEndMode.ClosestTouch)
+            .WithProgressBarToilDelay(TargetIndex.A, 300, false, -0.5f);
 
-        toilTeleport.initAction = () =>
+        workToOpenDoor.AddFinishAction(delegate
         {
             ModLog.Log($"Ensuring Map from Job {this}");
             Door.EnsureMap(() =>
             {
                 ModLog.Log($"Map Ensured from Job {this}");
             });
-        };
-
-        toilTeleport.AddEndCondition(() => Door.GetOtherMap() == null && !Door.IsOpen() ? JobCondition.Ongoing : JobCondition.Succeeded);
-
-        yield return toilTeleport;
+        });
+        yield return workToOpenDoor;
     }
 }
