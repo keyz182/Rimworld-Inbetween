@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Inbetween.Conditions;
 using RimWorld;
 using Verse;
 
@@ -10,4 +11,6 @@ public class InbetweenZoneDef : Def
     public MapGeneratorDef mapGenerator;
 
     public List<IncidentDef> eventDefs;
+
+    public List<DoorOpenConditionDef> doorOpenConditions;
 }

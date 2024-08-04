@@ -28,6 +28,9 @@
             <li>Disease_GutWorms</li>
             <li>Disease_MuscleParasites</li>
         </eventDefs>
+        <doorOpenConditions>
+            <li>IB_DC_Wait</li>
+        </doorOpenConditions>
     </Inbetween.Mapping.InbetweenZoneDef>
 
 </Defs>

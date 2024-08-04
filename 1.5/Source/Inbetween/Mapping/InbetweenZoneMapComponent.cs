@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using HarmonyLib;
+using Inbetween.Buildings;
 using Inbetween.MapGen;
 using RimWorld;
 using Verse;
@@ -14,6 +15,7 @@ public class InbetweenZoneMapComponent : MapComponent
     public Map LastMap;
     public Map NextMap;
     public bool Root = false;
+    public int SpawnedTick;
 
     public virtual bool IsRootMap => Root;
 
@@ -29,12 +31,34 @@ public class InbetweenZoneMapComponent : MapComponent
 
     public InbetweenZoneMapComponent(Map map) : base(map)
     {
+        SpawnedTick = Find.TickManager.TicksAbs;
     }
 
     public InbetweenZoneMapComponent(Map map, Map lastMap, Map nextMap, List<IncidentDef> eventDefs) : base(map)
     {
         LastMap = lastMap;
         NextMap = nextMap;
+        SpawnedTick = Find.TickManager.TicksAbs;
+    }
+
+    public virtual bool CanDoorOpen(out string reason, Building_IBPortal door)
+    {
+        if (InbetweenZoneDef == null)
+        {
+            reason = "";
+            return true;
+        }
+
+        if (InbetweenZoneDef.doorOpenConditions == null || InbetweenZoneDef.doorOpenConditions.Count <= 0)
+        {
+            reason = "";
+            return true;
+        }
+
+        string openReason = "";
+        bool canOpen = InbetweenZoneDef.doorOpenConditions.All(cnd => cnd.Worker.CanDoorOpen(out openReason, door));
+        reason = openReason;
+        return canOpen;
     }
 
     public override void ExposeData()
@@ -43,6 +67,7 @@ public class InbetweenZoneMapComponent : MapComponent
         Scribe_Defs.Look(ref InbetweenZoneDef, "InbetweenZoneDef");
         Scribe_References.Look(ref LastMap, "LastMap");
         Scribe_References.Look(ref NextMap, "NextMap");
+        Scribe_Values.Look(ref SpawnedTick, "SpawnedTick");
     }
 
     public override void MapComponentTick()

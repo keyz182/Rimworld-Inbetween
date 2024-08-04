@@ -67,6 +67,19 @@ public class Building_IBPortal : MapPortal
         return true;
     }
 
+
+    public virtual bool IsOpenable(out string reason)
+    {
+        reason = "";
+
+        if (!ZoneMapComponent.CanDoorOpen(out reason, this))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     public virtual void EnsureMap(Action callback)
     {
         throw new NotImplementedException();

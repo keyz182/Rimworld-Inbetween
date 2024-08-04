@@ -92,6 +92,12 @@ public class Building_InbetweenDoor : Building_IBPortal
     public override bool IsEnterable(out string reason)
     {
         reason = "";
+
+        if (!ZoneMapComponent.CanDoorOpen(out reason, this))
+        {
+            return false;
+        }
+
         if (GetOtherMap() == null)
         {
             reason = "IB_DoorNotOpen".Translate();

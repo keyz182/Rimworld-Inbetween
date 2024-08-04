@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Defs>
+    <Inbetween.Conditions.DoorOpenConditionDef>
+        <defName>IB_DC_Wait</defName>
+        <TicksElapsed>6000</TicksElapsed>
+        <workerClass>Inbetween.Conditions.DoorOpenConditionWorker</workerClass>
+    </Inbetween.Conditions.DoorOpenConditionDef>
+
+</Defs>

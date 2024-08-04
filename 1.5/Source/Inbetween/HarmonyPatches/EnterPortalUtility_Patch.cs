@@ -28,6 +28,13 @@ public static class EnterPortalUtility_Patch
             return "Incapable".Translate();
         }
 
+        Building_IBPortal ibdoor = portal as Building_IBPortal;
+
+        if (ibdoor != null && !ibdoor.IsOpenable(out string reason))
+        {
+            return reason;
+        }
+
         return true;
     }
 
